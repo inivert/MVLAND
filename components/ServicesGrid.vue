@@ -7,7 +7,6 @@ const services = [
     icon: 'PencilIcon',
     features: [
       'Custom design plans',
-      '3D visualization',
       'Sustainable solutions',
       'Expert consultation',
     ],

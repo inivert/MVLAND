@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
+
   app: {
     head: {
       title: 'M.V Landscaping',
@@ -22,27 +23,32 @@ export default defineNuxtConfig({
     },
     pageTransition: { name: 'page', mode: 'out-in' },
   },
-  modules: [
-    '@nuxtjs/tailwindcss',
-  ],
+
+  modules: ['@nuxtjs/tailwindcss'],
+
   css: ['~/assets/css/main.css'],
+
   nitro: {
     compressPublicAssets: true,
     minify: true,
   },
+
   experimental: {
     inlineSSRStyles: false,
     viewTransition: true,
     renderJsonPayloads: true,
   },
+
   routeRules: {
     '/': { prerender: true },
   },
+
   vue: {
     compilerOptions: {
       isCustomElement: tag => ['swiper-container', 'swiper-slide'].includes(tag),
     },
   },
+
   vite: {
     build: {
       cssMinify: true,
@@ -61,4 +67,6 @@ export default defineNuxtConfig({
       include: ['vue'],
     },
   },
+
+  compatibilityDate: '2025-02-02',
 })

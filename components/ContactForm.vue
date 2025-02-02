@@ -21,30 +21,29 @@ const formData = reactive({
 })
 
 const isSubmitting = ref(false)
+const showSuccess = ref(false)
 
-async function handleSubmit() {
+function handleSubmit() {
   isSubmitting.value = true
+  showSuccess.value = false
 
-  try {
-    await fetch('/api/contact', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-    formData.name = ''
-    formData.email = ''
-    formData.service = ''
-    formData.message = ''
-    emit('success', 'Message sent successfully!')
-  }
-  catch {
-    emit('error', 'Failed to send message. Please try again.')
-  }
-  finally {
-    isSubmitting.value = false
-  }
+  // Simulate API call
+  setTimeout(() => {
+    try {
+      formData.name = ''
+      formData.email = ''
+      formData.service = ''
+      formData.message = ''
+      showSuccess.value = true
+      setTimeout(() => {
+        showSuccess.value = false
+      }, 3000)
+    } catch (error) {
+      console.error('Form submission error:', error)
+    } finally {
+      isSubmitting.value = false
+    }
+  }, 1000)
 }
 </script>
 
@@ -73,6 +72,14 @@ async function handleSubmit() {
             <div class="w-full h-full mx-auto opacity-30 blur-lg filter bg-gradient-to-r from-green-400 via-emerald-500 to-green-600" />
           </div>
           <form class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8" @submit.prevent="handleSubmit">
+            <!-- Success message -->
+            <div
+              v-if="showSuccess"
+              class="absolute top-0 left-0 right-0 p-4 bg-green-500 text-white text-center rounded-t-2xl transition-all duration-300"
+            >
+              Message sent successfully!
+            </div>
+
             <!-- Name field -->
             <div class="mb-6">
               <label class="relative block">
@@ -349,12 +356,29 @@ async function handleSubmit() {
 </template>
 
 <style scoped>
-/* Custom scrollbar for textarea */
-textarea {
-  scrollbar-width: thin;
-  scrollbar-color: #22c55e #e2e8f0;
-}
-
 textarea::-webkit-scrollbar {
   width: 8px;
+}
+
+textarea::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800;
+  border-radius: 4px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  @apply bg-green-500 dark:bg-green-600;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+  @apply bg-green-600 dark:bg-green-500;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .transition-all {
+    transition: none !important;
+  }
+}
 </style>

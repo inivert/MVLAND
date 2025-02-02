@@ -7,37 +7,37 @@ const projects = [
   {
     title: 'Modern Backyard Retreat',
     description: 'A contemporary outdoor living space featuring a custom fire pit and sustainable native plants.',
-    image: '/images/showcase/project1.jpg',
+    image: '/images/samples/IMG_6685.jpeg',
     tags: ['Modern', 'Sustainable', 'Outdoor Living'],
   },
   {
     title: 'Mediterranean Garden',
     description: 'Drought-resistant landscaping with Mediterranean-inspired design elements and water features.',
-    image: '/images/showcase/project2.jpg',
+    image: '/images/samples/IMG_6687.jpeg',
     tags: ['Mediterranean', 'Water-Wise', 'Design'],
   },
   {
     title: 'Urban Rooftop Oasis',
     description: 'Transforming a city rooftop into a lush garden with container plants and modular seating.',
-    image: '/images/showcase/project3.jpg',
+    image: '/images/samples/IMG_6689.jpeg',
     tags: ['Urban', 'Rooftop', 'Container Garden'],
   },
   {
     title: 'Natural Stone Patio',
     description: 'Custom-designed patio using natural stone, integrated lighting, and native plantings.',
-    image: '/images/showcase/project4.jpg',
+    image: '/images/samples/IMG_6691.jpeg',
     tags: ['Hardscape', 'Natural Stone', 'Lighting'],
   },
   {
     title: 'Zen Garden Retreat',
     description: 'Japanese-inspired garden featuring a koi pond, bamboo elements, and meditation spaces.',
-    image: '/images/showcase/project5.jpg',
+    image: '/images/samples/IMG_6695.jpeg',
     tags: ['Japanese', 'Water Feature', 'Meditation'],
   },
   {
     title: 'Edible Landscape',
     description: 'Beautiful and functional garden design incorporating fruit trees, herbs, and vegetables.',
-    image: '/images/showcase/project6.jpg',
+    image: '/images/samples/IMG_6673.jpeg',
     tags: ['Edible', 'Organic', 'Sustainable'],
   },
 ]

@@ -7,22 +7,19 @@ const testimonials = [
     id: 1,
     text: 'The team transformed our backyard into a stunning oasis. Their attention to detail and creative vision exceeded our expectations!',
     name: 'Sarah Johnson',
-    location: 'Boston, MA',
-    avatar: '/images/testimonials/avatar1.jpg',
+    location: 'Warwick, RI',
   },
   {
     id: 2,
     text: 'Professional, reliable, and incredibly skilled. They not only delivered on time but also provided valuable suggestions that improved our original design.',
     name: 'Michael Chen',
-    location: 'Cambridge, MA',
-    avatar: '/images/testimonials/avatar2.jpg',
+    location: 'Cumberland, RI',
   },
   {
     id: 3,
     text: 'Outstanding service from start to finish. Their sustainable landscaping practices and knowledge of local flora helped create a beautiful, low-maintenance garden.',
     name: 'Emily Rodriguez',
-    location: 'Brookline, MA',
-    avatar: '/images/testimonials/avatar3.jpg',
+    location: 'Providence, RI',
   },
 ]
 
@@ -67,9 +64,9 @@ function startAutoplay() {
 
     <div class="relative max-w-7xl mx-auto">
       <!-- Section header -->
-      <div class="text-center mb-16">
-        <h2 class="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-4">
-          What Our Clients Say
+      <div class="text-center mb-24">
+        <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+          What Our <span class="text-emerald-600 dark:text-emerald-400">Clients Say</span>
         </h2>
         <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
           Hear from our satisfied customers about their experience with our landscaping services.
@@ -77,58 +74,61 @@ function startAutoplay() {
       </div>
 
       <!-- Testimonials carousel -->
-      <div class="relative" @mouseenter="autoplay = false" @mouseleave="autoplay = true">
+      <div
+        class="relative mx-auto max-w-3xl"
+        @mouseenter="autoplay = false"
+        @mouseleave="autoplay = true"
+      >
         <!-- Main testimonial -->
-        <transition-group
-          name="testimonial"
-          tag="div"
-          class="relative"
-        >
-          <div
-            v-for="(testimonial, index) in testimonials"
-            v-show="currentIndex === index"
-            :key="testimonial.id"
+        <div class="relative min-h-[300px]">
+          <transition-group
+            name="testimonial"
+            tag="div"
             class="relative"
           >
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 md:p-12 transition-all duration-500">
-              <!-- Quote decoration -->
-              <div class="absolute top-0 left-0 transform -translate-x-4 -translate-y-4">
-                <svg class="w-16 h-16 text-green-500/10" fill="currentColor" viewBox="0 0 32 32">
-                  <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
-                </svg>
-              </div>
-
-              <!-- Content -->
-              <div class="relative">
-                <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 italic mb-8">
-                  {{ testimonial.text }}
-                </p>
-                <div class="flex items-center gap-4">
-                  <div class="relative w-16 h-16 rounded-full overflow-hidden ring-2 ring-green-500/20">
-                    <img :src="testimonial.avatar" :alt="testimonial.name" class="w-full h-full object-cover">
+            <div
+              v-for="(testimonial, index) in testimonials"
+              v-show="currentIndex === index"
+              :key="testimonial.id"
+              class="absolute inset-0 w-full"
+            >
+              <div class="relative bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 md:p-10">
+                <!-- Quote icon -->
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                  <div class="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                    </svg>
                   </div>
-                  <div>
+                </div>
+
+                <!-- Content -->
+                <div class="mt-6 text-center">
+                  <p class="text-xl md:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
+                    "{{ testimonial.text }}"
+                  </p>
+                  <div class="flex flex-col items-center">
                     <h4 class="text-lg font-semibold text-gray-900 dark:text-white">
                       {{ testimonial.name }}
                     </h4>
-                    <p class="text-gray-500 dark:text-gray-400">
+                    <p class="text-emerald-600 dark:text-emerald-400 font-medium">
                       {{ testimonial.location }}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </transition-group>
+          </transition-group>
+        </div>
 
         <!-- Navigation buttons -->
         <div class="absolute top-1/2 -translate-y-1/2 flex justify-between items-center w-full">
           <button
-            class="group relative -left-4 w-12 h-12 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-lg flex items-center justify-center transform transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-green-500/50"
+            class="group -left-4 md:-left-8 absolute w-10 h-10 rounded-full bg-white/80 dark:bg-gray-800/80 shadow-lg backdrop-blur-sm flex items-center justify-center transform transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 hover:bg-white dark:hover:bg-gray-800"
             @click="prevSlide"
           >
             <svg
-              class="w-6 h-6 text-gray-600 dark:text-gray-300 transform group-hover:-translate-x-0.5 transition-transform duration-300"
+              class="w-5 h-5 text-emerald-600 dark:text-emerald-400 transform group-hover:-translate-x-0.5 transition-transform duration-200"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -142,11 +142,11 @@ function startAutoplay() {
             </svg>
           </button>
           <button
-            class="group relative -right-4 w-12 h-12 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-lg flex items-center justify-center transform transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-green-500/50"
+            class="group -right-4 md:-right-8 absolute w-10 h-10 rounded-full bg-white/80 dark:bg-gray-800/80 shadow-lg backdrop-blur-sm flex items-center justify-center transform transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 hover:bg-white dark:hover:bg-gray-800"
             @click="nextSlide"
           >
             <svg
-              class="w-6 h-6 text-gray-600 dark:text-gray-300 transform group-hover:translate-x-0.5 transition-transform duration-300"
+              class="w-5 h-5 text-emerald-600 dark:text-emerald-400 transform group-hover:translate-x-0.5 transition-transform duration-200"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -166,14 +166,18 @@ function startAutoplay() {
           <button
             v-for="(_, index) in testimonials"
             :key="index"
-            class="w-2.5 h-2.5 rounded-full transition-all duration-300 focus:outline-none"
-            :class="[
-              currentIndex === index
-                ? 'bg-green-500 w-8'
-                : 'bg-gray-300 dark:bg-gray-600 hover:bg-green-500/50',
-            ]"
+            class="group focus:outline-none"
             @click="currentIndex = index"
-          />
+          >
+            <div
+              class="w-2 h-2 rounded-full transition-all duration-300"
+              :class="[
+                currentIndex === index
+                  ? 'w-6 bg-emerald-500'
+                  : 'bg-gray-300 dark:bg-gray-600 group-hover:bg-emerald-500/50',
+              ]"
+            />
+          </button>
         </div>
       </div>
     </div>
@@ -183,23 +187,33 @@ function startAutoplay() {
 <style scoped>
 .testimonial-enter-active,
 .testimonial-leave-active {
-  transition: all 0.5s ease;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .testimonial-enter-from {
   opacity: 0;
-  transform: translateX(30px);
+  transform: translateX(20px);
 }
 
 .testimonial-leave-to {
   opacity: 0;
-  transform: translateX(-30px);
+  transform: translateX(-20px);
 }
 
 .testimonial-enter-to,
 .testimonial-leave-from {
   opacity: 1;
   transform: translateX(0);
+}
+
+/* Ensure smooth transitions for indicator dots */
+.w-6 {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Improve transition performance */
+.transition-all {
+  will-change: transform, opacity;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -209,7 +223,9 @@ function startAutoplay() {
   }
 
   .testimonial-enter-from,
-  .testimonial-leave-to {
+  .testimonial-leave-to,
+  .testimonial-enter-to,
+  .testimonial-leave-from {
     transform: none;
   }
 }
