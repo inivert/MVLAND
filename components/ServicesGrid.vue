@@ -1,115 +1,77 @@
 <!-- components/ServicesGrid.vue -->
-<script setup>
-const services = [
-  {
-    title: 'Landscape Design',
-    description: 'Create your dream outdoor space with our professional landscape design services.',
-    icon: 'PencilIcon',
-    features: [
-      'Custom design plans',
-      'Sustainable solutions',
-      'Expert consultation',
-    ],
-  },
-  {
-    title: 'Lawn Maintenance',
-    description: 'Keep your lawn looking pristine with our comprehensive maintenance services.',
-    icon: 'ScissorsIcon',
-    features: [
-      'Regular mowing',
-      'Fertilization',
-      'Weed control',
-      'Pest management',
-    ],
-  },
-  {
-    title: 'Hardscaping',
-    description: 'Add structure and functionality to your outdoor space with our hardscaping solutions.',
-    icon: 'CubeIcon',
-    features: [
-      'Patios & walkways',
-      'Retaining walls',
-      'Outdoor kitchens',
-      'Fire pits',
-    ],
-  },
-  {
-    title: 'Garden Care',
-    description: 'Maintain beautiful and healthy gardens with our expert garden care services.',
-    icon: 'LeafIcon',
-    features: [
-      'Planting & pruning',
-      'Mulching',
-      'Seasonal cleanup',
-      'Plant health care',
-    ],
-  },
-  {
-    title: 'Irrigation Systems',
-    description: 'Install and maintain efficient irrigation systems for your landscape.',
-    icon: 'WaterIcon',
-    features: [
-      'Smart controllers',
-      'Drip irrigation',
-      'System maintenance',
-      'Water conservation',
-    ],
-  },
-  {
-    title: 'Outdoor Lighting',
-    description: 'Enhance the beauty and security of your property with outdoor lighting.',
-    icon: 'LightBulbIcon',
-    features: [
-      'LED solutions',
-      'Path lighting',
-      'Security lighting',
-      'Holiday lighting',
-    ],
-  },
-]
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { SERVICES } from '~/constants/services'
+
+const { t } = useI18n()
 </script>
 
 <template>
-  <section class="py-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900">
-    <div class="max-w-7xl mx-auto">
+  <section id="services" class="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-transparent via-gray-50/30 to-transparent dark:via-gray-900/30"
+    />
+    <div class="relative max-w-7xl mx-auto">
       <div class="text-center mb-16">
-        <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          Our Services
+        <span
+          class="inline-block px-4 py-2 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 text-sm font-medium mb-4 transform hover:scale-105 transition-transform duration-300"
+        >
+          {{ t('services.subtitle') }}
+        </span>
+        <h2
+          class="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-4"
+        >
+          {{ t('services.title') }}
         </h2>
         <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          We offer a comprehensive range of landscaping services to enhance your outdoor living space
+          {{ t('services.description') }}
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
         <div
-          v-for="service in services"
-          :key="service.title"
-          class="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 transition-transform duration-300 hover:transform hover:scale-105"
+          v-for="(category, index) in SERVICES"
+          :key="index"
+          class="group relative bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
         >
-          <div class="text-green-600 dark:text-green-500 mb-4">
-            <component :is="service.icon" class="w-12 h-12" />
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-green-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"
+          />
+          <div class="relative z-10">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              {{ category.title }}
+            </h3>
+            <ul class="space-y-3">
+              <li
+                v-for="(item, itemIndex) in category.items"
+                :key="itemIndex"
+                class="flex items-center text-gray-600 dark:text-gray-400"
+              >
+                <svg
+                  class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                {{ item }}
+              </li>
+            </ul>
           </div>
-          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-            {{ service.title }}
-          </h3>
-          <p class="text-gray-600 dark:text-gray-400">
-            {{ service.description }}
-          </p>
-          <ul class="mt-4 space-y-2">
-            <li
-              v-for="feature in service.features"
-              :key="feature"
-              class="flex items-center text-gray-600 dark:text-gray-400"
-            >
-              <svg class="w-4 h-4 text-green-600 dark:text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-              </svg>
-              {{ feature }}
-            </li>
-          </ul>
         </div>
       </div>
+
+      <!-- Contact CTA -->
     </div>
   </section>
 </template>
+
+<style scoped>
+.group:hover {
+  transform: translateY(-4px);
+}
+</style>

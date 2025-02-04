@@ -17,18 +17,27 @@ export default antfu(
       'vue/component-name-in-template-casing': ['error', 'PascalCase'],
       'vue/component-options-name-casing': ['error', 'PascalCase'],
       'vue/custom-event-name-casing': ['error', 'camelCase'],
-      'vue/define-macros-order': ['error', {
-        order: ['defineProps', 'defineEmits'],
-      }],
-      'vue/html-closing-bracket-newline': ['error', {
-        singleline: 'never',
-        multiline: 'always',
-      }],
+      'vue/define-macros-order': [
+        'error',
+        {
+          order: ['defineProps', 'defineEmits'],
+        },
+      ],
+      'vue/html-closing-bracket-newline': [
+        'error',
+        {
+          singleline: 'never',
+          multiline: 'always',
+        },
+      ],
       'vue/html-indent': ['error', 2],
-      'vue/max-attributes-per-line': ['error', {
-        singleline: 3,
-        multiline: 1,
-      }],
+      'vue/max-attributes-per-line': [
+        'error',
+        {
+          singleline: 3,
+          multiline: 1,
+        },
+      ],
       'vue/no-unused-refs': 'error',
       'vue/padding-line-between-blocks': ['error', 'always'],
       'no-console': isProduction ? 'error' : 'warn',

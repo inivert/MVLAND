@@ -1,0 +1,39 @@
+{
+  "hero": {
+    "title": "Landscaping Services, Junk removal, and more",
+    "subtitle": "Professional landscaping services in Rhode Island area",
+    "cta": "Get a Free Quote"
+  },
+  "services": {
+    "title": "Our Services",
+    "landscaping": {
+      "title": "Landscaping",
+      "description": "Complete landscape design and maintenance"
+    },
+    "lawn": {
+      "title": "Lawn Care",
+      "description": "Regular maintenance and seasonal care"
+    },
+    "hardscape": {
+      "title": "Hardscaping",
+      "description": "Patios, walkways, and retaining walls"
+    }
+  },
+  "testimonials": {
+    "title": "What Our Clients Say",
+    "subtitle": "Read testimonials from our satisfied customers"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "submit": "Send Message"
+  },
+  "footer": {
+    "rights": "All rights reserved",
+    "contact": "Contact",
+    "services": "Services",
+    "about": "About"
+  }
+}

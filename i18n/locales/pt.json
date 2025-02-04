@@ -1,0 +1,36 @@
+{
+  "navigation": {
+    "home": "Início",
+    "services": "Serviços",
+    "work": "Nosso Trabalho",
+    "testimonials": "Depoimentos",
+    "contact": "Contato"
+  },
+  "hero": {
+    "title": "Serviços Profissionais de Paisagismo",
+    "subtitle": "Transforme seu espaço exterior em uma obra-prima",
+    "cta": "Orçamento Grátis"
+  },
+  "services": {
+    "title": "Nossos Serviços",
+    "landscaping": "Paisagismo",
+    "maintenance": "Manutenção de Gramado",
+    "design": "Design de Paisagem",
+    "irrigation": "Sistemas de Irrigação",
+    "hardscaping": "Construção de Jardins",
+    "cleanup": "Limpeza Sazonal"
+  },
+  "contact": {
+    "title": "Entre em Contato",
+    "name": "Nome",
+    "email": "E-mail",
+    "phone": "Telefone",
+    "message": "Mensagem",
+    "submit": "Enviar Mensagem"
+  },
+  "footer": {
+    "rights": "Todos os direitos reservados",
+    "privacy": "Política de Privacidade",
+    "terms": "Termos de Serviço"
+  }
+}

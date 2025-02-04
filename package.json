@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@nuxtjs/color-mode": "^3.3.2",
+    "@nuxtjs/i18n": "9.0.0-rc.2",
     "nuxt": "^3.9.3",
     "vue": "^3.4.14",
     "vue-router": "^4.2.5"
@@ -23,7 +24,9 @@
     "@antfu/eslint-config": "^4.1.0",
     "@nuxt/devtools": "^1.0.6",
     "@nuxt/eslint-config": "^0.2.0",
-    "@nuxt/image": "^1.1.0",
+    "@nuxt/image": "^1.9.0",
+    "@nuxtjs/robots": "^5.2.2",
+    "@nuxtjs/sitemap": "^7.2.4",
     "@nuxtjs/tailwindcss": "^6.10.4",
     "@types/node": "^20.11.5",
     "@vueuse/core": "^10.7.2",
@@ -34,6 +37,8 @@
     "eslint-define-config": "^2.1.0",
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-vue": "^9.20.1",
+    "ipx": "^3.0.1",
+    "nuxt-schema-org": "^4.1.1",
     "postcss": "^8.4.33",
     "prettier": "^3.2.4",
     "sass": "^1.70.0",

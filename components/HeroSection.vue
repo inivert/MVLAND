@@ -1,7 +1,9 @@
 <!-- components/HeroSection.vue -->
 <script setup lang="ts">
-import { useImage } from '#image'
 import { onMounted, reactive, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface CardStyle {
   transform: string
@@ -12,7 +14,8 @@ interface ContentStyle {
 }
 
 // Background pattern
-const patternUrl = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'20\' height=\'20\' viewBox=\'0 0 20 20\'%3E%3Cpath fill=\'%23ffffff\' fill-opacity=\'0.4\' d=\'M1 1h2v2H1V1zm4 0h2v2H5V1zm4 0h2v2H9V1zm4 0h2v2h-2V1zm4 0h2v2h-2V1z\'/%3E%3C/svg%3E'
+const patternUrl
+  = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'20\' height=\'20\' viewBox=\'0 0 20 20\'%3E%3Cpath fill=\'%23ffffff\' fill-opacity=\'0.4\' d=\'M1 1h2v2H1V1zm4 0h2v2H5V1zm4 0h2v2H9V1zm4 0h2v2h-2V1zm4 0h2v2h-2V1z\'/%3E%3C/svg%3E'
 
 // Card animation composable
 function useCardAnimation() {
@@ -27,17 +30,17 @@ function useCardAnimation() {
   const handleMouseMove = (e: MouseEvent) => {
     const target = e.target as HTMLElement
     const rect = target.getBoundingClientRect()
-    
+
     // Calculate mouse position relative to card center
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
     const centerX = rect.width / 2
     const centerY = rect.height / 2
-    
+
     // Smoother rotation calculations with dampening
     const rotateX = ((y - centerY) / centerY) * 8 // Reduced from 10 to 8 degrees
     const rotateY = ((x - centerX) / centerX) * 8 // Reduced from 10 to 8 degrees
-    
+
     // Apply smooth transform with easing
     cardStyle.transform = `perspective(2000px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01, 1.01, 1.01)`
     contentStyle.transform = 'translateZ(20px)' // Reduced from 30px to 20px
@@ -59,14 +62,11 @@ function useCardAnimation() {
 
 const { cardStyle, contentStyle, handleMouseMove, handleMouseLeave } = useCardAnimation()
 
-// Hero content
-const title = ref('Elevate Your')
-const subtitle = ref('Outdoor Living')
-const description = ref('Award-winning landscape design that transforms ordinary spaces into extraordinary outdoor sanctuaries. Let us bring your vision to life.')
-
 // Featured project data
 const featuredProject = reactive({
-  label: 'Latest Projects',
+  label: t('hero.card.label'),
+  title: t('hero.card.title'),
+  description: t('hero.card.description'),
   images: [
     '/images/samples/IMG_6685.jpeg',
     '/images/samples/IMG_6687.jpeg',
@@ -99,7 +99,7 @@ onMounted(() => {
     imageError.value = true
     console.error('Failed to load image:', featuredProject.images[0])
   }
-  
+
   setInterval(rotateImage, 5000)
 })
 
@@ -136,14 +136,17 @@ function handleImageError() {
       <div class="grid lg:grid-cols-2 gap-12 items-center">
         <!-- Left column: Text content -->
         <div class="text-center lg:text-left">
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-6 tracking-tight transition-colors duration-300">
-            <span class="block transform hover:scale-105 transition-all duration-300">{{ title }}</span>
-            <span class="block text-emerald-800 dark:text-emerald-400 transform hover:scale-105 transition-all duration-300 delay-100">
-              {{ subtitle }}
-            </span>
+          <h1
+            class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-6 tracking-tight transition-colors duration-300"
+          >
+            <span class="block transform hover:scale-105 transition-all duration-300">{{
+              t('hero.title')
+            }}</span>
           </h1>
-          <p class="text-gray-800 dark:text-gray-300 text-xl mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed transition-colors duration-300">
-            {{ description }}
+          <p
+            class="text-gray-800 dark:text-gray-300 text-xl mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed transition-colors duration-300"
+          >
+            {{ t('hero.subtitle') }}
           </p>
           <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
             <a
@@ -151,9 +154,11 @@ function handleImageError() {
               class="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white bg-emerald-800 dark:bg-emerald-600 rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-emerald-500/25"
               aria-label="Get Started"
             >
-              <span class="absolute inset-0 w-full h-full bg-emerald-900 dark:bg-emerald-700 opacity-0 group-hover:opacity-100 transition-all duration-300" />
+              <span
+                class="absolute inset-0 w-full h-full bg-emerald-900 dark:bg-emerald-700 opacity-0 group-hover:opacity-100 transition-all duration-300"
+              />
               <span class="relative flex items-center">
-                Get Started
+                {{ t('hero.cta') }}
                 <svg
                   class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-300"
                   fill="none"
@@ -181,28 +186,42 @@ function handleImageError() {
             @mouseleave="handleMouseLeave"
           >
             <!-- Border beam effect -->
-            <div class="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+            <div
+              class="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+            >
               <div class="absolute inset-0 rounded-2xl border-2 border-emerald-500/20">
-                <div class="absolute inset-[-2px] bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent border-beam" />
+                <div
+                  class="absolute inset-[-2px] bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent border-beam"
+                />
               </div>
             </div>
 
             <!-- Background image -->
             <div class="absolute inset-0 w-full h-full">
-              <img
+              <nuxt-img
                 :key="currentImageIndex"
                 :src="featuredProject.images[currentImageIndex]"
                 :alt="featuredProject.title"
                 class="absolute inset-0 w-full h-full object-cover hero-transition-all duration-700"
                 :class="{ 'opacity-0': !imageLoaded || imageError }"
+                loading="lazy"
+                placeholder
+                format="webp"
+                quality="85"
+                sizes="sm:100vw md:80vw lg:50vw"
                 @load="handleImageLoad"
                 @error="handleImageError"
               />
-              <img
+              <nuxt-img
                 src="/images/samples/hero-bg.jpg"
                 alt="Fallback background"
                 class="absolute inset-0 w-full h-full object-cover"
                 :class="{ 'opacity-0': imageLoaded && !imageError }"
+                loading="lazy"
+                placeholder
+                format="webp"
+                quality="80"
+                sizes="sm:100vw md:80vw lg:50vw"
               />
             </div>
 
@@ -217,8 +236,12 @@ function handleImageError() {
               class="relative z-10 p-8 flex flex-col justify-end hero-transform-gpu transition-all duration-500"
               :style="contentStyle"
             >
-              <span class="text-sm font-medium text-emerald-300 tracking-wider uppercase mb-2 transition-colors duration-300 text-shadow">{{ featuredProject.label }}</span>
-              <h3 class="text-3xl font-bold text-white mb-2 transition-colors duration-300 text-shadow">
+              <span
+                class="text-sm font-medium text-emerald-300 tracking-wider uppercase mb-2 transition-colors duration-300 text-shadow"
+              >{{ featuredProject.label }}</span>
+              <h3
+                class="text-3xl font-bold text-white mb-2 transition-colors duration-300 text-shadow"
+              >
                 {{ featuredProject.title }}
               </h3>
               <p class="text-gray-100 text-lg transition-colors duration-300 text-shadow">
@@ -233,7 +256,9 @@ function handleImageError() {
                 :key="index"
                 class="w-2 h-2 rounded-full transition-all duration-300"
                 :class="[
-                  currentImageIndex === index ? 'w-6 bg-emerald-400' : 'bg-white/70 hover:bg-emerald-400/70',
+                  currentImageIndex === index
+                    ? 'w-6 bg-emerald-400'
+                    : 'bg-white/70 hover:bg-emerald-400/70',
                 ]"
               />
             </div>
@@ -248,7 +273,6 @@ function handleImageError() {
       </div>
 
       <!-- Scroll indicator -->
-
     </div>
 
     <!-- Debug info during development -->
@@ -277,15 +301,21 @@ function handleImageError() {
 }
 
 /* Add smooth transition for content */
-[class*="hero-transform-gpu"] > * {
+[class*='hero-transform-gpu'] > * {
   transition: all 0.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
   backface-visibility: hidden;
 }
 
 @keyframes hero-scroll {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(20px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(20px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 .hero-animate-scroll {
@@ -306,9 +336,15 @@ function handleImageError() {
 
 /* Text gradient animation */
 @keyframes hero-gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .hero-gradient-animate {

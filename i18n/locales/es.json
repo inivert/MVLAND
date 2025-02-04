@@ -1,0 +1,36 @@
+{
+  "navigation": {
+    "home": "Inicio",
+    "services": "Servicios",
+    "work": "Nuestro Trabajo",
+    "testimonials": "Testimonios",
+    "contact": "Contacto"
+  },
+  "hero": {
+    "title": "Servicios Profesionales de Paisajismo",
+    "subtitle": "Transforme su espacio exterior en una obra maestra",
+    "cta": "Cotización Gratis"
+  },
+  "services": {
+    "title": "Nuestros Servicios",
+    "landscaping": "Paisajismo",
+    "maintenance": "Mantenimiento de Césped",
+    "design": "Diseño de Paisajes",
+    "irrigation": "Sistemas de Riego",
+    "hardscaping": "Construcción de Jardines",
+    "cleanup": "Limpieza de Temporada"
+  },
+  "contact": {
+    "title": "Contáctenos",
+    "name": "Nombre",
+    "email": "Correo Electrónico",
+    "phone": "Teléfono",
+    "message": "Mensaje",
+    "submit": "Enviar Mensaje"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados",
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Servicio"
+  }
+}
