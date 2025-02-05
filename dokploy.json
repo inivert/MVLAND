@@ -1,0 +1,22 @@
+{
+  "build": {
+    "builder": "nixpacks",
+    "buildCommand": "pnpm run build",
+    "startCommand": "pnpm start",
+    "env": {
+      "NODE_ENV": "production",
+      "HOST": "0.0.0.0"
+    }
+  },
+  "deploy": {
+    "numReplicas": 1,
+    "healthCheck": {
+      "path": "/",
+      "port": 3000
+    },
+    "resources": {
+      "cpu": "100m",
+      "memory": "256Mi"
+    }
+  }
+} 

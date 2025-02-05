@@ -3,6 +3,7 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import LanguageSwitcher from './LanguageSwitcher.vue'
+import logoImage from '~/assets/logo.png'
 
 const { t } = useI18n()
 const isMenuOpen = ref(false)
@@ -81,7 +82,7 @@ onUnmounted(() => {
         <a href="/" class="flex items-center space-x-3 group">
           <div class="h-12 w-12 relative">
             <img
-              src="/images/samples/logo.png"
+              :src="logoImage"
               alt="M.V Landscaping Logo"
               class="h-full w-full object-contain brightness-0 dark:brightness-200 transition-transform duration-300 group-hover:scale-105"
             />

@@ -1,0 +1,2 @@
+import o from"node:process";globalThis._importMeta_={url:import.meta.url,env:o.env};import"./timing.js";globalThis.__timing__.logStart("Nitro Start");export{x as default}from"./chunks/nitro/nitro.mjs";import"node:http";import"node:https";import"node:fs";import"node:path";import"node:async_hooks";import"node:url";import"ipx";globalThis.__timing__.logEnd("Nitro Start");
+//# sourceMappingURL=index.mjs.map

@@ -27,24 +27,63 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' },
   },
 
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/i18n', '@nuxt/image', 'nuxt-delay-hydration', '@nuxtjs/color-mode'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/i18n', '@nuxt/image', '@nuxtjs/color-mode'],
 
+  // Improved hydration settings
+  experimental: {
+    asyncContext: true,
+    asyncEntry: true,
+    viewTransition: true,
+    renderJsonPayloads: true,
+    componentIslands: true,
+  },
+
+  // SSR optimization
   nitro: {
     preset: 'vercel',
+    compressPublicAssets: true,
+    minify: true,
+    timing: true,
+    routeRules: {
+      '/**': { swr: true },
+      '/': { prerender: true, static: true },
+    },
   },
 
+  // Image optimization
   image: {
     provider: 'ipx',
+    dir: 'public',
+    screens: {
+      xs: 320,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      xxl: 1536,
+    },
+    presets: {
+      default: {
+        modifiers: {
+          format: 'webp',
+          quality: 80,
+          loading: 'lazy',
+        },
+      },
+    },
   },
 
+  // Color mode configuration
   colorMode: {
     classSuffix: '',
     preference: 'system',
     fallback: 'light',
+    dataValue: 'theme',
   },
 
+  // i18n configuration
   i18n: {
-    baseUrl: 'http://localhost:3000',
+    baseUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
     strategy: 'prefix_except_default',
     defaultLocale: 'en',
     locales: [
@@ -76,54 +115,14 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
-  nitro: {
-    compressPublicAssets: true,
-    minify: true,
-  },
-
-  experimental: {
-    viewTransition: true,
-    renderJsonPayloads: true,
-    componentIslands: true,
-  },
-
-  // Image optimization and lazy loading
-  image: {
-    provider: 'ipx',
-    screens: {
-      xs: 320,
-      sm: 640,
-      md: 768,
-      lg: 1024,
-      xl: 1280,
-      xxl: 1536,
-    },
-    presets: {
-      default: {
-        modifiers: {
-          format: 'webp',
-          quality: 80,
-          loading: 'lazy',
-        },
-      },
-    },
-  },
-
-  // Route rules for better performance
-  routeRules: {
-    '/': { prerender: true },
-    '/**': {
-      swr: true,
-    },
-  },
-
+  // Vue configuration
   vue: {
     compilerOptions: {
       isCustomElement: tag => ['swiper-container', 'swiper-slide'].includes(tag),
     },
   },
 
-  // Vite configuration for better chunking and lazy loading
+  // Vite configuration
   vite: {
     build: {
       cssMinify: true,
@@ -131,7 +130,7 @@ export default defineNuxtConfig({
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
-              return 'vendor'
+              return id.includes('vue') ? 'vue-vendor' : 'vendor'
             }
             if (id.includes('components/')) {
               return 'components'
@@ -144,9 +143,18 @@ export default defineNuxtConfig({
       },
     },
     optimizeDeps: {
-      include: ['vue'],
+      include: ['vue', 'vue-i18n'],
+    },
+    server: {
+      hmr: {
+        protocol: 'ws',
+      },
     },
   },
 
-  compatibilityDate: '2025-02-02',
+  runtimeConfig: {
+    public: {
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+    },
+  },
 })

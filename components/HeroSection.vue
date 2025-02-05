@@ -14,8 +14,10 @@ interface ContentStyle {
 }
 
 // Background pattern
-const patternUrl
-  = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'20\' height=\'20\' viewBox=\'0 0 20 20\'%3E%3Cpath fill=\'%23ffffff\' fill-opacity=\'0.4\' d=\'M1 1h2v2H1V1zm4 0h2v2H5V1zm4 0h2v2H9V1zm4 0h2v2h-2V1zm4 0h2v2h-2V1z\'/%3E%3C/svg%3E'
+const patternUrl = ref('')
+onMounted(() => {
+  patternUrl.value = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'20\' height=\'20\' viewBox=\'0 0 20 20\'%3E%3Cpath fill=\'%23ffffff\' fill-opacity=\'0.4\' d=\'M1 1h2v2H1V1zm4 0h2v2H5V1zm4 0h2v2H9V1zm4 0h2v2h-2V1zm4 0h2v2h-2V1z\'/%3E%3C/svg%3E'
+})
 
 // Card animation composable
 function useCardAnimation() {
@@ -28,26 +30,26 @@ function useCardAnimation() {
   })
 
   const handleMouseMove = (e: MouseEvent) => {
+    if (process.server) return
+    
     const target = e.target as HTMLElement
     const rect = target.getBoundingClientRect()
 
-    // Calculate mouse position relative to card center
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
     const centerX = rect.width / 2
     const centerY = rect.height / 2
 
-    // Smoother rotation calculations with dampening
-    const rotateX = ((y - centerY) / centerY) * 8 // Reduced from 10 to 8 degrees
-    const rotateY = ((x - centerX) / centerX) * 8 // Reduced from 10 to 8 degrees
+    const rotateX = ((y - centerY) / centerY) * 8
+    const rotateY = ((x - centerX) / centerX) * 8
 
-    // Apply smooth transform with easing
     cardStyle.transform = `perspective(2000px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01, 1.01, 1.01)`
-    contentStyle.transform = 'translateZ(20px)' // Reduced from 30px to 20px
+    contentStyle.transform = 'translateZ(20px)'
   }
 
   const handleMouseLeave = () => {
-    // Smooth reset animation
+    if (process.server) return
+    
     cardStyle.transform = 'perspective(2000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'
     contentStyle.transform = 'translateZ(0px)'
   }
@@ -83,8 +85,15 @@ const featuredProject = reactive({
 const currentImageIndex = ref(0)
 const imageLoaded = ref(false)
 const imageError = ref(false)
+const isClient = ref(false)
+
+onMounted(() => {
+  isClient.value = true
+})
 
 function rotateImage() {
+  if (process.server) return
+  
   imageLoaded.value = false
   imageError.value = false
   currentImageIndex.value = (currentImageIndex.value + 1) % featuredProject.images.length
@@ -92,42 +101,49 @@ function rotateImage() {
 
 // Preload images
 const preloadImages = () => {
+  if (process.server) return
+  
   featuredProject.images.forEach((src) => {
     const img = new Image()
     img.src = src
   })
 }
 
+let rotationInterval: NodeJS.Timeout | null = null
+
 // Set up image rotation interval
 onMounted(() => {
-  // Initial load check
   const img = new Image()
   img.onload = () => {
     imageLoaded.value = true
-    preloadImages() // Preload other images after first one loads
+    preloadImages()
   }
   img.onerror = () => {
     imageError.value = true
     console.error('Failed to load image:', featuredProject.images[0])
   }
-  img.src = featuredProject.images[currentImageIndex.value] // Set the source to start loading
+  img.src = featuredProject.images[currentImageIndex.value]
 
-  const interval = setInterval(rotateImage, 5000)
-  
-  // Clean up interval on component unmount
-  onUnmounted(() => {
-    clearInterval(interval)
-  })
+  rotationInterval = setInterval(rotateImage, 5000)
+})
+
+// Clean up interval on component unmount
+onUnmounted(() => {
+  if (rotationInterval) {
+    clearInterval(rotationInterval)
+  }
 })
 
 // Handle image load
 function handleImageLoad() {
+  if (process.server) return
   imageLoaded.value = true
   imageError.value = false
 }
 
 // Handle image error
 function handleImageError() {
+  if (process.server) return
   imageError.value = true
   imageLoaded.value = false
   console.error('Failed to load image:', featuredProject.images[currentImageIndex.value])
@@ -140,13 +156,15 @@ function handleImageError() {
     aria-label="Hero Section"
   >
     <!-- Animated background patterns -->
-    <div class="absolute inset-0 opacity-5 dark:opacity-10 transition-opacity duration-300">
-      <div
-        class="absolute inset-0"
-        :style="{ backgroundImage: `url('${patternUrl}')`, backgroundSize: '20px 20px' }"
-        aria-hidden="true"
-      />
-    </div>
+    <ClientOnly>
+      <div class="absolute inset-0 opacity-5 dark:opacity-10 transition-opacity duration-300">
+        <div
+          class="absolute inset-0"
+          :style="patternUrl ? { backgroundImage: `url('${patternUrl}')`, backgroundSize: '20px 20px' } : {}"
+          aria-hidden="true"
+        />
+      </div>
+    </ClientOnly>
 
     <!-- Main hero content -->
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
@@ -195,98 +213,101 @@ function handleImageError() {
         </div>
 
         <!-- Right column: Interactive 3D card -->
-        <div class="relative group hero-perspective">
-          <div
-            class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden hero-transform-gpu transition-all duration-500 hover:scale-[1.02] shadow-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/20 group-hover:border-emerald-500/20"
-            :style="cardStyle"
-            @mousemove="handleMouseMove"
-            @mouseleave="handleMouseLeave"
-          >
-            <!-- Border beam effect -->
+        <ClientOnly>
+          <div class="relative group hero-perspective">
             <div
-              class="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+              class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden hero-transform-gpu transition-all duration-500 hover:scale-[1.02] shadow-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/20 group-hover:border-emerald-500/20"
+              :style="isClient ? cardStyle : {}"
+              @mousemove="handleMouseMove"
+              @mouseleave="handleMouseLeave"
             >
-              <div class="absolute inset-0 rounded-2xl border-2 border-emerald-500/20">
+              <!-- Border beam effect -->
+              <div
+                class="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+              >
+                <div class="absolute inset-0 rounded-2xl border-2 border-emerald-500/20">
+                  <div
+                    class="absolute inset-[-2px] bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent border-beam"
+                  />
+                </div>
+              </div>
+
+              <!-- Background image -->
+              <div class="absolute inset-0 w-full h-full">
+                <!-- Loading indicator -->
                 <div
-                  class="absolute inset-[-2px] bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent border-beam"
+                  class="absolute inset-0 w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 transition-opacity duration-300"
+                  :class="{ 'opacity-0': imageLoaded || imageError }"
+                >
+                  <div class="animate-spin rounded-full h-12 w-12 border-4 border-emerald-500 border-t-transparent"></div>
+                </div>
+                
+                <img
+                  v-if="isClient"
+                  :key="currentImageIndex"
+                  :src="featuredProject.images[currentImageIndex]"
+                  :alt="featuredProject.title"
+                  class="absolute inset-0 w-full h-full object-cover hero-transition-all duration-700"
+                  :class="{ 'opacity-0': !imageLoaded || imageError }"
+                  loading="eager"
+                  @load="handleImageLoad"
+                  @error="handleImageError"
+                />
+                <img
+                  src="/images/samples/hero-bg.jpg"
+                  alt="Fallback background"
+                  class="absolute inset-0 w-full h-full object-cover hero-transition-all duration-700"
+                  :class="{ 'opacity-0': imageLoaded && !imageError }"
+                  loading="eager"
+                />
+              </div>
+
+              <!-- Gradient overlay -->
+              <div
+                class="absolute inset-0 bg-gradient-to-tr from-gray-900/70 via-gray-900/40 to-transparent dark:from-black/60 dark:via-black/40 dark:to-transparent backdrop-blur-[0.5px] transition-colors duration-300"
+                aria-hidden="true"
+              />
+
+              <!-- Content overlay -->
+              <div
+                class="relative z-10 p-8 flex flex-col justify-end hero-transform-gpu transition-all duration-500"
+                :style="contentStyle"
+              >
+                <span
+                  class="text-sm font-medium text-emerald-300 tracking-wider uppercase mb-2 transition-colors duration-300 text-shadow"
+                >{{ featuredProject.label }}</span>
+                <h3
+                  class="text-3xl font-bold text-white mb-2 transition-colors duration-300 text-shadow"
+                >
+                  {{ featuredProject.title }}
+                </h3>
+                <p class="text-gray-100 text-lg transition-colors duration-300 text-shadow">
+                  {{ featuredProject.description }}
+                </p>
+              </div>
+
+              <!-- Interactive elements -->
+              <div class="absolute top-4 right-4 flex space-x-2">
+                <span
+                  v-for="(_, index) in featuredProject.images"
+                  :key="index"
+                  class="w-2 h-2 rounded-full transition-all duration-300"
+                  :class="[
+                    currentImageIndex === index
+                      ? 'w-6 bg-emerald-400'
+                      : 'bg-white/70 hover:bg-emerald-400/70',
+                  ]"
                 />
               </div>
             </div>
 
-            <!-- Background image -->
-            <div class="absolute inset-0 w-full h-full">
-              <!-- Loading indicator -->
-              <div
-                class="absolute inset-0 w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 transition-opacity duration-300"
-                :class="{ 'opacity-0': imageLoaded || imageError }"
-              >
-                <div class="animate-spin rounded-full h-12 w-12 border-4 border-emerald-500 border-t-transparent"></div>
-              </div>
-              
-              <img
-                :key="currentImageIndex"
-                :src="featuredProject.images[currentImageIndex]"
-                :alt="featuredProject.title"
-                class="absolute inset-0 w-full h-full object-cover hero-transition-all duration-700"
-                :class="{ 'opacity-0': !imageLoaded || imageError }"
-                loading="eager"
-                @load="handleImageLoad"
-                @error="handleImageError"
-              />
-              <img
-                src="/images/samples/hero-bg.jpg"
-                alt="Fallback background"
-                class="absolute inset-0 w-full h-full object-cover hero-transition-all duration-700"
-                :class="{ 'opacity-0': imageLoaded && !imageError }"
-                loading="eager"
-              />
-            </div>
-
-            <!-- Gradient overlay -->
+            <!-- Card glow effect -->
             <div
-              class="absolute inset-0 bg-gradient-to-tr from-gray-900/70 via-gray-900/40 to-transparent dark:from-black/60 dark:via-black/40 dark:to-transparent backdrop-blur-[0.5px] transition-colors duration-300"
+              class="absolute -inset-1 rounded-2xl bg-gradient-to-t from-emerald-500/20 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-all duration-700 pointer-events-none blur-xl"
               aria-hidden="true"
             />
-
-            <!-- Content overlay -->
-            <div
-              class="relative z-10 p-8 flex flex-col justify-end hero-transform-gpu transition-all duration-500"
-              :style="contentStyle"
-            >
-              <span
-                class="text-sm font-medium text-emerald-300 tracking-wider uppercase mb-2 transition-colors duration-300 text-shadow"
-              >{{ featuredProject.label }}</span>
-              <h3
-                class="text-3xl font-bold text-white mb-2 transition-colors duration-300 text-shadow"
-              >
-                {{ featuredProject.title }}
-              </h3>
-              <p class="text-gray-100 text-lg transition-colors duration-300 text-shadow">
-                {{ featuredProject.description }}
-              </p>
-            </div>
-
-            <!-- Interactive elements -->
-            <div class="absolute top-4 right-4 flex space-x-2">
-              <span
-                v-for="(_, index) in featuredProject.images"
-                :key="index"
-                class="w-2 h-2 rounded-full transition-all duration-300"
-                :class="[
-                  currentImageIndex === index
-                    ? 'w-6 bg-emerald-400'
-                    : 'bg-white/70 hover:bg-emerald-400/70',
-                ]"
-              />
-            </div>
           </div>
-
-          <!-- Card glow effect -->
-          <div
-            class="absolute -inset-1 rounded-2xl bg-gradient-to-t from-emerald-500/20 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-all duration-700 pointer-events-none blur-xl"
-            aria-hidden="true"
-          />
-        </div>
+        </ClientOnly>
       </div>
 
       <!-- Scroll indicator -->
