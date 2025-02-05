@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 interface Project {
@@ -28,7 +28,7 @@ function closeModal(): void {
   }, 300)
 }
 
-const projects = [
+const projects = computed(() => [
   {
     title: t('work.projects.modern.title', 'Modern Stone Pathway'),
     description: t(
@@ -83,13 +83,18 @@ const projects = [
     image: '/images/samples/IMG_6673.jpeg',
     tags: ['Full Renovation', 'Sod Installation', 'Plant Design'],
   },
-]
+])
 
 onMounted(() => {
   // Add a small delay before showing the projects for a nice fade-in effect
-  setTimeout(() => {
-    isVisible.value = true
-  }, 100)
+  nextTick(() => {
+    setTimeout(() => {
+      const projects = document.querySelectorAll('.group.relative')
+      projects.forEach((project) => {
+        project.classList.remove('opacity-0', 'translate-y-4')
+      })
+    }, 100)
+  })
 })
 </script>
 
@@ -109,8 +114,7 @@ onMounted(() => {
         </h2>
         <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
           {{
-            t(
-              'work.description',
+            t('work.description',
               'Explore our portfolio of completed landscaping projects, showcasing our expertise in creating beautiful outdoor spaces.',
             )
           }}
@@ -120,23 +124,18 @@ onMounted(() => {
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div
           v-for="(project, index) in projects"
-          :key="index"
-          class="group relative"
-          :class="{ 'opacity-0 translate-y-4': !isVisible }"
+          :key="project.title"
+          class="group relative opacity-0 translate-y-4 transition-all duration-500"
           :style="{ transitionDelay: `${index * 100}ms` }"
         >
           <div
             class="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg transition-all duration-500 group-hover:shadow-2xl"
           >
-            <nuxt-img
+            <img
               :src="project.image"
               :alt="project.title"
               class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
               loading="lazy"
-              placeholder
-              format="webp"
-              quality="80"
-              sizes="sm:100vw md:50vw lg:33vw"
             />
             <div
               class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
@@ -221,16 +220,12 @@ onMounted(() => {
           class="relative flex items-center justify-center bg-black/20 rounded-xl backdrop-blur-sm p-4"
           @click.stop
         >
-          <nuxt-img
+          <img
             v-if="selectedProject"
             :src="selectedProject.image"
             :alt="selectedProject.title"
             class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl transform transition-transform duration-300 hover:scale-[1.02]"
             loading="lazy"
-            placeholder
-            format="webp"
-            quality="90"
-            sizes="sm:100vw md:80vw lg:70vw"
           />
           <!-- Close button -->
           <button

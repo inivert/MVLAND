@@ -191,7 +191,7 @@ export default defineI18nConfig(() => ({
         terms: 'Términos de Servicio',
       },
       hero: {
-        title: 'Servicios de Paisajismo, Remoción de Basura y más',
+        title: 'Servicios de Paisajismo, Removición de Basura y más',
         subtitle: 'Servicios profesionales de paisajismo en Rhode Island',
         cta: 'Obtén una Cotización Gratis',
         card: {

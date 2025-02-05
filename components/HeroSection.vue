@@ -1,6 +1,6 @@
 <!-- components/HeroSection.vue -->
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -70,9 +70,12 @@ const featuredProject = reactive({
   images: [
     '/images/samples/IMG_6685.jpeg',
     '/images/samples/IMG_6687.jpeg',
-    '/images/samples/IMG_6689.jpeg',
     '/images/samples/IMG_6691.jpeg',
     '/images/samples/IMG_6701.jpeg',
+    '/images/samples/IMG_6673.jpeg',
+    '/images/samples/IMG_6681.jpeg',
+    '/images/samples/IMG_6689.jpeg',
+    '/images/samples/IMG_6695.jpeg',
   ],
 })
 
@@ -87,20 +90,34 @@ function rotateImage() {
   currentImageIndex.value = (currentImageIndex.value + 1) % featuredProject.images.length
 }
 
+// Preload images
+const preloadImages = () => {
+  featuredProject.images.forEach((src) => {
+    const img = new Image()
+    img.src = src
+  })
+}
+
 // Set up image rotation interval
 onMounted(() => {
   // Initial load check
   const img = new Image()
-  img.src = featuredProject.images[0]
   img.onload = () => {
     imageLoaded.value = true
+    preloadImages() // Preload other images after first one loads
   }
   img.onerror = () => {
     imageError.value = true
     console.error('Failed to load image:', featuredProject.images[0])
   }
+  img.src = featuredProject.images[currentImageIndex.value] // Set the source to start loading
 
-  setInterval(rotateImage, 5000)
+  const interval = setInterval(rotateImage, 5000)
+  
+  // Clean up interval on component unmount
+  onUnmounted(() => {
+    clearInterval(interval)
+  })
 })
 
 // Handle image load
@@ -198,30 +215,30 @@ function handleImageError() {
 
             <!-- Background image -->
             <div class="absolute inset-0 w-full h-full">
-              <nuxt-img
+              <!-- Loading indicator -->
+              <div
+                class="absolute inset-0 w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 transition-opacity duration-300"
+                :class="{ 'opacity-0': imageLoaded || imageError }"
+              >
+                <div class="animate-spin rounded-full h-12 w-12 border-4 border-emerald-500 border-t-transparent"></div>
+              </div>
+              
+              <img
                 :key="currentImageIndex"
                 :src="featuredProject.images[currentImageIndex]"
                 :alt="featuredProject.title"
                 class="absolute inset-0 w-full h-full object-cover hero-transition-all duration-700"
                 :class="{ 'opacity-0': !imageLoaded || imageError }"
-                loading="lazy"
-                placeholder
-                format="webp"
-                quality="85"
-                sizes="sm:100vw md:80vw lg:50vw"
+                loading="eager"
                 @load="handleImageLoad"
                 @error="handleImageError"
               />
-              <nuxt-img
+              <img
                 src="/images/samples/hero-bg.jpg"
                 alt="Fallback background"
-                class="absolute inset-0 w-full h-full object-cover"
+                class="absolute inset-0 w-full h-full object-cover hero-transition-all duration-700"
                 :class="{ 'opacity-0': imageLoaded && !imageError }"
-                loading="lazy"
-                placeholder
-                format="webp"
-                quality="80"
-                sizes="sm:100vw md:80vw lg:50vw"
+                loading="eager"
               />
             </div>
 

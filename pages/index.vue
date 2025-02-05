@@ -7,7 +7,7 @@ const ContactForm = defineAsyncComponent(() => import('~/components/ContactForm.
 const HeroSection = defineAsyncComponent(() => import('~/components/HeroSection.vue'))
 const ServicesGrid = defineAsyncComponent(() => import('~/components/ServicesGrid.vue'))
 const TestimonialsCarousel = defineAsyncComponent(() => import('~/components/TestimonialsCarousel.vue'))
-const WorkShowcase = defineAsyncComponent(() => import('~/components/WorkShowcase.vue'))
+import WorkShowcase from '../components/WorkShowcase.vue'
 
 const { t } = useI18n()
 
@@ -95,15 +95,11 @@ onMounted(() => {
                 />
               </div>
               <div class="relative rounded-2xl overflow-hidden shadow-2xl">
-                <nuxt-img
+                <img
                   src="/images/samples/hero-bg.jpg"
-                  :alt="t('about.teamImageAlt')"
+                  :alt="$t('about.teamImageAlt')"
                   class="w-full aspect-[4/3] object-cover transform group-hover:scale-105 transition-transform duration-700"
                   loading="lazy"
-                  placeholder
-                  format="webp"
-                  quality="85"
-                  sizes="sm:100vw md:80vw lg:50vw"
                 />
               </div>
             </div>

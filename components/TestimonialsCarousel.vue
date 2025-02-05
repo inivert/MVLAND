@@ -100,7 +100,7 @@ onMounted(() => {
                   </div>
                   <!-- Image container -->
                   <div class="relative w-full h-full">
-                    <nuxt-img
+                    <NuxtImg
                       :src="testimonial.image"
                       :alt="testimonial.name"
                       class="w-full h-full object-cover rounded-full border-4 border-white dark:border-gray-800"
