@@ -27,7 +27,19 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' },
   },
 
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/i18n', '@nuxt/image', 'nuxt-delay-hydration'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/i18n', '@nuxt/image', 'nuxt-delay-hydration', '@nuxtjs/color-mode'],
+
+  image: {
+    dir: 'public',
+    domains: ['localhost'],
+    format: ['webp', 'jpeg', 'jpg', 'png'],
+  },
+
+  colorMode: {
+    classSuffix: '',
+    preference: 'system',
+    fallback: 'light',
+  },
 
   i18n: {
     baseUrl: 'http://localhost:3000',
