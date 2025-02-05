@@ -29,10 +29,12 @@ export default defineNuxtConfig({
 
   modules: ['@nuxtjs/tailwindcss', '@nuxtjs/i18n', '@nuxt/image', 'nuxt-delay-hydration', '@nuxtjs/color-mode'],
 
+  nitro: {
+    preset: 'vercel',
+  },
+
   image: {
-    dir: 'public',
-    domains: ['localhost'],
-    format: ['webp', 'jpeg', 'jpg', 'png'],
+    provider: 'ipx',
   },
 
   colorMode: {

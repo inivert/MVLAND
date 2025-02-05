@@ -81,7 +81,7 @@ onUnmounted(() => {
         <a href="/" class="flex items-center space-x-3 group">
           <div class="h-12 w-12 relative">
             <img
-              src="/images/logo.png"
+              src="/images/samples/logo.png"
               alt="M.V Landscaping Logo"
               class="h-full w-full object-contain brightness-0 dark:brightness-200 transition-transform duration-300 group-hover:scale-105"
             />

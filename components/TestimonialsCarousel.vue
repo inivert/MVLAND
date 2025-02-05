@@ -10,19 +10,19 @@ const testimonials = [
     name: t('testimonials.clients.john.name'),
     location: t('testimonials.clients.john.location'),
     text: t('testimonials.clients.john.text'),
-    image: '/images/testimonials/testimonial1.jpg',
+    image: '/images/samples/IMG_6685.jpeg',
   },
   {
     name: t('testimonials.clients.sarah.name'),
     location: t('testimonials.clients.sarah.location'),
     text: t('testimonials.clients.sarah.text'),
-    image: '/images/testimonials/testimonial2.jpg',
+    image: '/images/samples/IMG_6687.jpeg',
   },
   {
     name: t('testimonials.clients.michael.name'),
     location: t('testimonials.clients.michael.location'),
     text: t('testimonials.clients.michael.text'),
-    image: '/images/testimonials/testimonial3.jpg',
+    image: '/images/samples/IMG_6689.jpeg',
   },
 ]
 
