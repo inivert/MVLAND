@@ -8,7 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "start": "PORT=$PORT node .output/server/index.mjs",
+    "start": "node .output/server/index.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "clean": "rm -rf .nuxt dist .output node_modules",

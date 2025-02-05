@@ -40,13 +40,17 @@ export default defineNuxtConfig({
 
   // SSR optimization
   nitro: {
-    preset: 'vercel',
+    preset: 'node',
+    prerender: {
+      failOnError: false,
+      crawlLinks: true,
+      routes: ['/'],
+    },
     compressPublicAssets: true,
     minify: true,
     timing: true,
     routeRules: {
-      '/**': { swr: true },
-      '/': { prerender: true, static: true },
+      '/**': { swr: 3600 },
     },
   },
 

@@ -1,22 +1,28 @@
 {
   "build": {
     "builder": "nixpacks",
-    "buildCommand": "pnpm run build",
+    "buildCommand": "pnpm install && pnpm run build",
     "startCommand": "pnpm start",
     "env": {
       "NODE_ENV": "production",
-      "HOST": "0.0.0.0"
+      "HOST": "0.0.0.0",
+      "NITRO_PRESET": "node"
     }
   },
   "deploy": {
     "numReplicas": 1,
     "healthCheck": {
       "path": "/",
-      "port": 3000
+      "port": 3000,
+      "initialDelaySeconds": 10,
+      "periodSeconds": 30
     },
     "resources": {
       "cpu": "100m",
-      "memory": "256Mi"
+      "memory": "512Mi"
+    },
+    "env": {
+      "NUXT_PUBLIC_SITE_URL": "https://${APP_DOMAIN}"
     }
   }
 } 
